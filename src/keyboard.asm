@@ -12,12 +12,12 @@ def wSelectorAttr equ $C000 + 3
 
 SECTION "OnScreenKeyboard", ROM0
 KeyboardMap:
-    db "1234567890", 2, 2, 2, 8, 0
+    db "1234567890", 2, 2, 2, 8, 2, 0
 .Row1:
-    db "!@#$%^&*_=()-+", 0
-    db "QWERTYUIOP[]\\", 13, 0
-    db "ASDFGHJKL:;\"`", 13 , 0
-    db "ZXC VBNM<>,./?", 0
+    db "!@#$%^&*_=()-+", 2, 0
+    db "QWERTYUIOP[]\\", 13, 2, 0
+    db "ASDFGHJKL:;\"`", 13 , 2, 0
+    db "ZXC VBNM<>,./?", 2, 0
 .End:
 
 def KeyboardMapRowSize equ KeyboardMap.Row1 - KeyboardMap
@@ -121,6 +121,20 @@ UpdateKeyboard::
     bit B_PAD_RIGHT, b
     jr nz, .NoMoveRight
     ld a, [wSelectedKeyPressId]
+
+    add a, 3
+    and a, $0F
+    jr nz, .NoWrapRight
+    ld a, [wSelectedKeyPressId]
+    sub 13
+    ld [wSelectedKeyPressId], a
+
+    ld a, [wSelectorX]
+    sub a, 13 * TILE_WIDTH    
+    ld [wSelectorX], a
+    jr .NoMoveRight
+.NoWrapRight:
+    ld a, [wSelectedKeyPressId]
     inc a
     ld [wSelectedKeyPressId], a
     
@@ -131,6 +145,19 @@ UpdateKeyboard::
 
     bit B_PAD_LEFT, b
     jr nz, .NoMoveLeft
+    ld a, [wSelectedKeyPressId]
+
+    and a, $0F
+    jr nz, .NoWrapLeft
+    ld a, [wSelectedKeyPressId]
+    add 13
+    ld [wSelectedKeyPressId], a
+    ld a, [wSelectorX]
+    add a, 13 * TILE_WIDTH    
+    ld [wSelectorX], a
+    jr .NoMoveLeft
+.NoWrapLeft:
+
     ld a, [wSelectedKeyPressId]
     dec a
     ld [wSelectedKeyPressId], a
