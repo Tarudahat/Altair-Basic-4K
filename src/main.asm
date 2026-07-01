@@ -58,7 +58,6 @@ EntryPoint:
     ld bc, 160
     call MemClr
 
-
     ; init Keyboard
     call InitKeyboard
     call DrawKeyboard
@@ -74,9 +73,11 @@ EntryPoint:
     cpl 
 	ld [rOBP1], a
 
+    ; init terminal
+    call InitTerminal
+
 Main:
-    call UpdateBtns
-    call UpdateKeyboard
+    call LineBuffer
     jr Main
 
 

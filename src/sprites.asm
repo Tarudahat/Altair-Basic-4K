@@ -1,6 +1,6 @@
 INCLUDE "include/hardware.inc"
 
-SECTION "ShadowOAM", WRAM0[$C000], ALIGN[8]
+SECTION "ShadowOAM", WRAM0, ALIGN[8]
 wShadowOAM:: ds 160
 
 SECTION "DMATransferRoutine", ROM0

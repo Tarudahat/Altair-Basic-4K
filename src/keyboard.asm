@@ -5,10 +5,10 @@ wCurrentKeyPress::db; the currently pressed key in ascii. 0 means no press
 wSelectedKeyPressId::db; the currently selected key
 wKeyboardHidden::db
 
-def wSelectorY equ $C000
-def wSelectorX equ $C000 + 1 
-def wSelectorTile equ $C000 + 2
-def wSelectorAttr equ $C000 + 3
+def wSelectorY equs "wShadowOAM"
+def wSelectorX equs "wShadowOAM + 1" 
+def wSelectorTile equs "wShadowOAM + 2"
+def wSelectorAttr equs "wShadowOAM + 3"
 
 SECTION "OnScreenKeyboard", ROM0
 KeyboardMap:
@@ -100,8 +100,8 @@ UpdateKeyboard::
     ld [wSelectorY], a
 .ToggleHidden:
 
-    ;xor a
-    ;ld [wCurrentKeyPress], a
+    xor a
+    ld [wCurrentKeyPress], a
 
     bit B_PAD_A, b
     jr nz, .NoPress
